@@ -1,4 +1,5 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import os
 from urllib.parse import parse_qsl, urlparse
 
 
@@ -10,20 +11,26 @@ class WebRequestHandler(BaseHTTPRequestHandler):
         return dict(parse_qsl(self.url().query))
 
     def do_GET(self):
-        self.send_response(200)
-        self.send_header("Content-Type", "text/html")
-        self.end_headers()
-        self.wfile.write(self.get_response().encode("utf-8"))
+        if self.path == "/":
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.end_headers()
+            self.wfile.write(self.get_response().encode("utf-8"))
+            
+        else:
+            self.send_response(404)
+            self.send_header("Content-Type", "text/html")
+            self.end_headers()
+            self.wfile.write("<h1>Página no encontrada</h1>".encode("utf-8"))
+            
 
     def get_response(self):
-        return f"""
-    <h1> Hola Web </h1>
-    <h1>{self.url().path.split('/')[-2]}: {self.url().path.split('/')[-1]} {self.query_data()} <h1>
-    <p> URL Parse Result : {self.url()}         </p>
-    <p> Path Original: {self.path}         </p>
-    <p> Headers: {self.headers}      </p>
-    <p> Query: {self.query_data()}   </p>
-"""
+        try:
+            
+            with open('home.html', 'r') as file:
+                return file.read()
+        except Exception as e:
+                return f"<h1>Error al cargar la página: {e}</h1>"
 
 
 if __name__ == "__main__":
