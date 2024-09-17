@@ -15,6 +15,8 @@ contenido = {
      '/proyecto/2': """<html>
              <h1>Proyecto: 2</h1>
              <p>Segunda pagina almacenada \t Numero de control: 21212002 </p>
+             <p>Cambio realizado en cloud9</p>
+             <p>Cambio realizado en cloud9</p>
              </html>""",
      '/proyecto/3': """<html>
              <h1>Proyecto: 3</h1>
@@ -50,7 +52,7 @@ class WebRequestHandler(BaseHTTPRequestHandler):
     def get_response(self):
         try:
             
-            with open('home.html', 'r') as file:
+            with open('home.html') as file:
                 return file.read()
         except Exception as e:
                 return f"<h1>Error al cargar la página: {e}</h1>"
@@ -58,6 +60,6 @@ class WebRequestHandler(BaseHTTPRequestHandler):
     
 if __name__ == "__main__":
     print("Starting server")
-    server = HTTPServer(("localhost", 8000), WebRequestHandler)
+    server = HTTPServer(("0.0.0.0", 8000), WebRequestHandler)
     server.serve_forever()
 
